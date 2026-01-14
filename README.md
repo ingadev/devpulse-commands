@@ -5,61 +5,50 @@ Slash-команды для автоматического логировани�
 ## Установка
 
 ```bash
-# 1. Создай директории
-mkdir -p ~/.claude/commands
-mkdir -p ~/.devpulse/sessions
-mkdir -p ~/.devpulse/reports/daily
-
-# 2. Скопируй команды
-cp devpulse-log.md ~/.claude/commands/
-cp devpulse-daily.md ~/.claude/commands/
-cp devpulse-recap.md ~/.claude/commands/
-```
-
-Или одной командой:
-```bash
-mkdir -p ~/.claude/commands ~/.devpulse/{sessions,reports/daily} && cp devpulse-*.md ~/.claude/commands/
+curl -fsSL https://raw.githubusercontent.com/ingadev/devpulse-commands/main/install.sh | bash
 ```
 
 ## Команды
 
 | Команда | Что делает |
 |---------|------------|
-| `/devpulse-log` | Сохраняет итоги текущей сессии в `~/.devpulse/sessions/` |
+| `/devpulse-log` | Сохраняет итоги сессии в `.devpulse/sessions/` |
 | `/devpulse-daily` | Собирает дневной отчёт из всех сессий |
 | `/devpulse-recap` | Показывает что делал (сегодня/вчера/неделя/проект) |
 
 ## Использование
 
 ```bash
-# После завершения задачи — залогировать
+# После завершения задачи
 /devpulse-log
 
-# В конце рабочего дня — собрать отчёт
+# В конце рабочего дня
 /devpulse-daily
 
 # Посмотреть историю
 /devpulse-recap
 /devpulse-recap вчера
 /devpulse-recap неделя
-/devpulse-recap FINANCE
 ```
 
-## Структура файлов
+## Структура
+
+Логи сохраняются **в корне проекта** где запущен Claude Code:
 
 ```
-~/.devpulse/
-├── sessions/                    # Логи сессий
-│   ├── FINANCE_2026-01-13_14-30_dpo-fix.md
-│   ├── B2C_2026-01-13_16-00_chat-refactoring.md
-│   └── ...
-└── reports/
-    └── daily/                   # Ежедневные отчёты
-        ├── 2026-01-13.md
-        └── ...
+~/my-project/                        # Твой проект
+├── .devpulse/                       # Логи этого проекта
+│   ├── sessions/
+│   │   ├── FINANCE_2026-01-13_14-30_dpo-fix.md
+│   │   └── B2C_2026-01-13_16-00_chat-refactoring.md
+│   └── reports/
+│       └── daily/
+│           └── 2026-01-13.md
+├── CLAUDE.md
+└── src/...
 ```
 
-## Формат лога сессии
+## Формат лога
 
 ```markdown
 ## ПРОЕКТ: FINANCE
@@ -75,13 +64,16 @@ Trade Payables берёт all-time ($133M), COGS только за год ($92M)
 - `BalanceSheetPage.tsx` — selector периода
 
 ### РЕЗУЛЬТАТ
-526 дней → 321 день (всё ещё высокий из-за dirty data)
+526 дней → 321 день
 
 ### ОСТАЛОСЬ
 - 38K записей с пустым dmc_status
+```
 
-### ЗАДАЧИ ДРУГИМ
-- @ops: проверить статусы services 2023-2025
+## Добавить в .gitignore
+
+```
+.devpulse/
 ```
 
 ---
